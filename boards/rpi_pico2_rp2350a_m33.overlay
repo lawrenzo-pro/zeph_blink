@@ -2,6 +2,7 @@
     aliases {
         led0 = &myled0;
         led1 = &myled1;
+        led2 = &interrupt_led;
         btn0 = &my_button0;
     };
     leds{
@@ -11,6 +12,10 @@
         };
         myled1: led1{
             gpios = <&gpio0 15 GPIO_ACTIVE_LOW>;
+        };
+        interrupt_led: led2{
+            gpios = <&gpio0 13 GPIO_ACTIVE_LOW>;
+            label = "Interrupt led";
         };
     };
     buttons{
