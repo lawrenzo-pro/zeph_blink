@@ -3,19 +3,35 @@
 #include <zephyr/drivers/gpio.h>
 #define DURATION 1000
 #define LED_NODE0 DT_ALIAS(led0)
+#define LED_NODE1 DT_ALIAS(led1)
+#define BTN_NODE DT_ALIAS(btn0)
 static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(LED_NODE0, gpios);
+static const struct gpio_dt_spec led1 = GPIO_DT_SPEC_GET(LED_NODE1, gpios);
+static const struct gpio_dt_spec btn = GPIO_DT_SPEC_GET(BTN_NODE, gpios);
 int main(void) {
     int ret;
     bool led_state = true;
-    if(!gpio_is_ready_dt(&led)){
+    if(!gpio_is_ready_dt(&led) && !gpio_is_ready_dt(&led1) && !gpio_is_ready_dt(&btn)){
         return 0;
     }
     ret = gpio_pin_configure_dt(&led, GPIO_OUTPUT_ACTIVE);
     if(ret < 0){
         return 0;
     }
+    ret = gpio_pin_configure_dt(&led1, GPIO_OUTPUT_ACTIVE);
+    if(ret < 0){
+        return 0;
+    }
+    ret = gpio_pin_configure_dt(&btn, GPIO_INPUT);
+    if(ret < 0){
+        return 0;
+    }
     while(1){
         ret = gpio_pin_toggle_dt(&led);
+        if(ret < 0){
+            return 0;
+        }
+        ret = gpio_pin_toggle_dt(&led1);
         if(ret < 0){
             return 0;
         }
