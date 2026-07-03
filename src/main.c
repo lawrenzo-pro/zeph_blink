@@ -72,9 +72,10 @@ int main(void) {
     blink_func,NULL,NULL,NULL, 5,0,K_NO_WAIT);
     k_tid_t blink_thread2 = k_thread_create(&my_thread2,my_second_stack,K_THREAD_STACK_SIZEOF(my_second_stack), 
     blink_func_two, NULL, NULL, NULL, 5, 0, K_NO_WAIT);
-    while(1){
-       // no ret
-       k_msleep(1000);
-    }
+   
+    k_thread_join(blink_thread, K_FOREVER);
+    k_thread_join(blink_thread2, K_FOREVER);
+    k_thread_stack_free(my_stack);
+    k_thread_stack_free(my_second_stack);
     return 0;
 }
